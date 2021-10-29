@@ -1,0 +1,11 @@
+version: v1beta1
+plugins:
+  - name: go
+    out: gen
+    opt: paths=source_relative,plugins=grpc
+#  - name: grpc-gateway
+#    out: gen
+#    opt: paths=source_relative,logtostderr=true,generate_unbound_methods=true
+#  - name: openapiv2
+#    out: gen
+#    opt: allow_merge=true,allow_repeated_fields_in_body=true,repeated_path_param_separator=ssv
