@@ -5,7 +5,7 @@ LDFLAGS = -X main.GitAbbrv=$(GIT_ABBRV) -X main.GitCommit=$(GIT_COMMIT) -X main.
 
 .PHONY: all proto check build tools
 
-all: tools build
+all: build
 
 clean:
 	@rm -fr bin/time-service
