@@ -112,7 +112,7 @@ func main() {
 			break
 		}
 
-		logger.Info("shutdown server")
+		logger.Info("stopping server")
 
 		if err := ln.Close(); err != nil {
 			logger.Error("failed closing server socket", zap.Error(err))
@@ -136,5 +136,5 @@ func main() {
 	}
 
 	wg.Wait()
-	logger.Info("shutdown")
+	logger.Info("shutdown server")
 }
