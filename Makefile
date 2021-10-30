@@ -17,6 +17,9 @@ tools:
 	@openssl rsa -in server.key -pubout > server.pub 2>&1
 	@rm -fr localhost
 
+check:
+	@buf lint
+
 proto: check
 	@buf generate
 

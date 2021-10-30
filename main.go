@@ -12,8 +12,8 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/johnbellone/time-service/internal/time-server"
 	time_api_v1 "github.com/johnbellone/time-service/gen/time/v1"
+	time_server_v1 "github.com/johnbellone/time-service/internal/time-server"
 
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
@@ -38,9 +38,9 @@ var (
 	TlsCertFile string
 	TlsKeyFile  string
 
-	BuildTime   string
-	GitAbbrv string
-	GitCommit   string
+	BuildTime string
+	GitAbbrv  string
+	GitCommit string
 )
 
 func init() {
@@ -107,7 +107,7 @@ func main() {
 		case <-ctx.Done():
 			logger.Info("closing server")
 			break
-		case s := <- c:
+		case s := <-c:
 			logger.Info("received signal", zap.Any("signal", s))
 			break
 		}
