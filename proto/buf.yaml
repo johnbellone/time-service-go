@@ -1,18 +1,4 @@
-version: v1beta1
-build:
-  roots:
-    - proto
-lint:
-  use:
-    - BASIC
-    - FILE_LOWER_SNAKE_CASE
-  except:
-    - PACKAGE_DIRECTORY_MATCH
-    - PACKAGE_SAME_DIRECTORY
-    - PACKAGE_AFFINITY
-  ignore:
-    - proto/google
-    - proto/protoc-gen-openapiv2
+version: v1
 breaking:
   use:
     - ENUM_VALUE_NO_DELETE_UNLESS_NAME_RESERVED
@@ -28,3 +14,10 @@ breaking:
     - RPC_SAME_REQUEST_TYPE
     - RPC_SAME_RESPONSE_TYPE
     - RPC_SAME_SERVER_STREAMING
+lint:
+  use:
+    - BASIC
+    - FILE_LOWER_SNAKE_CASE
+  except:
+    - PACKAGE_DIRECTORY_MATCH
+    - PACKAGE_SAME_DIRECTORY
