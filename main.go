@@ -1,14 +1,19 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"net"
 	"os"
+	"os/signal"
+	"sync"
+	"syscall"
 
 	"go.uber.org/zap"
 
 	"github.com/johnbellone/time-service/internal/time-server"
+	time_api_v1 "github.com/johnbellone/time-service/gen/time/v1"
 
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
@@ -52,12 +57,14 @@ func main() {
 	logger, err := zap.NewProduction()
 	if err != nil {
 		os.Exit(1)
+	} else if Verbose {
+
 	}
 	defer logger.Sync()
 
 	creds, err := credentials.NewServerTLSFromFile(TlsCertFile, TlsKeyFile)
 	if err != nil {
-		logger.Fatal(err.Error())
+		logger.Fatal("failed creating tls credentials", zap.Error(err))
 	}
 
 	s := grpc.NewServer(
@@ -77,29 +84,57 @@ func main() {
 	// Adds all of the handlers for RPC requests to the GRPC server instance. This code is
 	// generated when the `protoc` command is run with the `plugins:grpc` switch enabled.
 	grpc_health_v1.RegisterHealthServer(s, health.NewServer())
-	time_server_v1.RegisterTimeServer(s, time_server_v1.NewServer())
+	time_api_v1.RegisterTimeServer(s, time_server_v1.NewServer())
 	reflection.Register(s)
 
-	ln, err := net.Listen("tcp", fmt.Sprintf(":%d", Port))
+	ln, err := net.Listen("tcp", fmt.Sprintf(":%d", GrpcPort))
 	if err != nil {
-		logger.Fatal(err.Error())
+		logger.Fatal("failed opening server socket", zap.Error(err))
 	}
 
 	// Set up instance of background context with cancel to gracefully shutdown server when C-c in foreground.
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
+	wg := sync.WaitGroup{}
+
+	wg.Add(1)
 	go func() {
 		defer s.GracefulStop()
-		<-ctx.Done()
-		if err := ln.Close(); err != nil {
-			logger.Error(fmt.Sprintf("Failed to close %s: %v", ln.Addr(), err))
+		select {
+		case <-ctx.Done():
+			logger.Info("closing server")
+			break
+		case s := <- c:
+			logger.Info("received signal", zap.Any("signal", s))
+			break
 		}
+
+		logger.Info("shutdown server")
+
+		if err := ln.Close(); err != nil {
+			logger.Error("failed closing server socket", zap.Error(err))
+		}
+		cancel()
+		wg.Done()
 	}()
 
-	logger.Info(fmt.Sprintf("%s-%s built at %s", Version, GitAbbrv, BuildTime))
-	logger.Info(fmt.Sprintf("server started on %v", ln.Addr()))
+	program, _ := os.Executable()
+	logger.Info("build info",
+		zap.String("Executable", program),
+		zap.String("Version", Version),
+		zap.String("GitAbbrv", GitAbbrv),
+		zap.String("GitCommit", GitCommit),
+		zap.String("BuildTime", BuildTime),
+	)
+
+	logger.Info("starting server", zap.Uint("GrpcPort", GrpcPort))
 	if err = s.Serve(ln); err != nil {
-		logger.Fatal(err.Error())
+		logger.Error("server error", zap.Error(err))
 	}
+
+	wg.Wait()
+	logger.Info("shutdown")
 }

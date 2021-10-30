@@ -21,7 +21,7 @@ proto: check
 	@buf generate
 
 build:
-	@go build -ldflags "$(LDFLAGS)" -o bin/go-service
+	@go build -ldflags "$(LDFLAGS)" -o bin/time-service
 
 release: all
 	@zip --junk-paths bin/* README.md
