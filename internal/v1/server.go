@@ -10,9 +10,8 @@ import (
 	"github.com/opentracing/opentracing-go"
 
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/codes"
-
+	"google.golang.org/grpc/metadata"
 )
 
 type Server struct {
@@ -23,7 +22,7 @@ func NewServer() *Server {
 	return &Server{}
 }
 
-func (s *Server) GetCurrentTime(ctx context.Context, req *pb.TimeRequest) (*pb.TimeResponse, error) {
+func (s *Server) GetCurrentTime(ctx context.Context, req *pb.GetTimeRequest) (*pb.GetTimeResponse, error) {
 	span, ctx := opentracing.StartSpanFromContext(ctx, "TimeServer/GetCurrentTime")
 	defer span.Finish()
 
@@ -33,8 +32,8 @@ func (s *Server) GetCurrentTime(ctx context.Context, req *pb.TimeRequest) (*pb.T
 	}
 
 	now := time.Now().UTC()
-	rsp := pb.TimeResponse{
-		CurrentTime: timestamppb.New(now),
+	rsp := pb.GetTimeResponse{
+		Timestamp: timestamppb.New(now),
 	}
 	return &rsp, nil
 }

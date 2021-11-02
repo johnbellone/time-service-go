@@ -13,7 +13,9 @@ import (
 	"go.uber.org/zap"
 
 	time_api_v1 "github.com/johnbellone/time-service/gen/time/v1"
-	time_server_v1 "github.com/johnbellone/time-service/internal/time-server"
+	time_api_v2 "github.com/johnbellone/time-service/gen/time/v2beta1"
+	time_server_v1 "github.com/johnbellone/time-service/internal/v1"
+	time_server_v2 "github.com/johnbellone/time-service/internal/v2"
 
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
@@ -85,6 +87,7 @@ func main() {
 	// generated when the `protoc` command is run with the `plugins:grpc` switch enabled.
 	grpc_health_v1.RegisterHealthServer(s, health.NewServer())
 	time_api_v1.RegisterTimeServer(s, time_server_v1.NewServer())
+	time_api_v2.RegisterTimeServer(s, time_server_v2.NewServer())
 	reflection.Register(s)
 
 	ln, err := net.Listen("tcp", fmt.Sprintf(":%d", GrpcPort))
