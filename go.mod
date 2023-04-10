@@ -1,8 +1,8 @@
-module github.com/johnbellone/time-service
+module github.com/johnbellone/time-service-go
 
-go 1.17
+go 1.20
 
-replace github.com/johnbellone/time-server/gen => ./gen
+replace github.com/johnbellone/time-server-go/gen => ./gen
 
 require (
 	github.com/bufbuild/buf v0.56.0

@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	pb "github.com/johnbellone/time-service/gen/time/v1"
+	pb "github.com/johnbellone/time-service-go/gen/time/v1"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"github.com/opentracing/opentracing-go"

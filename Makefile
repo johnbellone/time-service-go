@@ -27,4 +27,4 @@ build:
 	@go build -ldflags "$(LDFLAGS)" -o bin/time-service
 
 release: all
-	@zip --junk-paths bin/* README.md
+	@zip --junk-paths bin/* README.md LICENSE

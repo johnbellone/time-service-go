@@ -12,10 +12,10 @@ import (
 
 	"go.uber.org/zap"
 
-	time_api_v1 "github.com/johnbellone/time-service/gen/time/v1"
-	time_api_v2 "github.com/johnbellone/time-service/gen/time/v2beta1"
-	time_server_v1 "github.com/johnbellone/time-service/internal/v1"
-	time_server_v2 "github.com/johnbellone/time-service/internal/v2"
+	time_api_v1 "github.com/johnbellone/time-service-go/gen/time/v1"
+	time_api_v2 "github.com/johnbellone/time-service-go/gen/time/v2beta1"
+	time_server_v1 "github.com/johnbellone/time-service-go/internal/v1"
+	time_server_v2 "github.com/johnbellone/time-service-go/internal/v2"
 
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
@@ -46,7 +46,7 @@ var (
 )
 
 func init() {
-	flag.UintVar(&GrpcPort, "server-port", 9090, "Set the server port.")
+	flag.UintVar(&GrpcPort, "server-port", 50100, "Set the server port.")
 	flag.BoolVar(&Verbose, "verbose", false, "Turn on verbose logging.")
 	flag.StringVar(&Environment, "environment", "local", "Set the environment name.")
 	flag.StringVar(&TlsCertFile, "tls-cert", "server.crt", "Set the path to TLS certificate.")

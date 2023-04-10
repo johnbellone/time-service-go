@@ -15,11 +15,11 @@
 # Dependency directories (remove the comment below to include it)
 vendor/
 
-tmp/
+**/tmp/
 log/
+**/gen/
 .env
 .DS_Store
-internal/gen/
 server.crt
 server.key
 server.pub
