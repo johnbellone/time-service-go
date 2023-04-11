@@ -8,7 +8,7 @@ LDFLAGS = -X main.GitAbbrv=$(GIT_ABBRV) -X main.GitCommit=$(GIT_COMMIT) -X main.
 all: build
 
 clean:
-	@rm -fr bin/time-service
+	@rm -fr bin
 
 tools:
 	@go mod tidy
@@ -24,6 +24,7 @@ proto: check
 	@buf generate
 
 build:
+	@mkdir -p bin/
 	@go build -ldflags "$(LDFLAGS)" -o bin/time-service
 
 release: all

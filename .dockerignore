@@ -8,3 +8,4 @@
 !Makefile
 !proto/
 !go.*
+!tmp/
