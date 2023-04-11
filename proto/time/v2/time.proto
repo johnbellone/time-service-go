@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package time.v2;
+option go_package = "github.com/johnbellone/time-service-go/gen/time/v2beta1;time_api_v2";
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+service TimeService {
+    rpc GetCurrentTime(GetCurrentTimeRequest) returns (GetCurrentTimeResponse) {
+        option (google.api.http).get = "/v2/time";
+    };
+
+    rpc GetLocalTime(GetLocalTimeRequest) returns (GetLocalTimeResponse) {
+        option (google.api.http).get = "/v2/time:local";
+    };
+}
+
+message GetCurrentTimeRequest {
+}
+
+message GetCurrentTimeResponse {
+    google.protobuf.Timestamp timestamp = 1;
+}
+
+message GetLocalTimeRequest {
+}
+
+message GetLocalTimeResponse {
+    google.protobuf.Timestamp timestamp = 1;
+}

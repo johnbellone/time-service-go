@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	pb "github.com/johnbellone/time-service-go/gen/time/v2beta1"
+	pb "github.com/johnbellone/time-service-go/gen/time/v2"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"github.com/opentracing/opentracing-go"
@@ -15,14 +15,14 @@ import (
 )
 
 type Server struct {
-	*pb.UnimplementedTimeServer
+	*pb.UnimplementedTimeServiceServer
 }
 
 func NewServer() *Server {
 	return &Server{}
 }
 
-func (s *Server) GetCurrentTime(ctx context.Context, req *pb.GetTimeRequest) (*pb.GetTimeResponse, error) {
+func (s *Server) GetCurrentTime(ctx context.Context, req *pb.GetCurrentTimeRequest) (*pb.GetCurrentTimeResponse, error) {
 	span, ctx := opentracing.StartSpanFromContext(ctx, "TimeServer/GetCurrentTime")
 	defer span.Finish()
 
@@ -32,13 +32,13 @@ func (s *Server) GetCurrentTime(ctx context.Context, req *pb.GetTimeRequest) (*p
 	}
 
 	now := time.Now().UTC()
-	rsp := pb.GetTimeResponse{
+	rsp := pb.GetCurrentTimeResponse{
 		Timestamp: timestamppb.New(now),
 	}
 	return &rsp, nil
 }
 
-func (s *Server) GetLocalTime(ctx context.Context, req *pb.GetTimeRequest) (*pb.GetTimeResponse, error) {
+func (s *Server) GetLocalTime(ctx context.Context, req *pb.GetLocalTimeRequest) (*pb.GetLocalTimeResponse, error) {
 	span, ctx := opentracing.StartSpanFromContext(ctx, "TimeServer/GetLocalTime")
 	defer span.Finish()
 
@@ -47,7 +47,7 @@ func (s *Server) GetLocalTime(ctx context.Context, req *pb.GetTimeRequest) (*pb.
 		return nil, grpc.Errorf(codes.InvalidArgument, "missing metadata")
 	}
 
-	rsp := pb.GetTimeResponse{
+	rsp := pb.GetLocalTimeResponse{
 		Timestamp: timestamppb.New(time.Now()),
 	}
 	return &rsp, nil

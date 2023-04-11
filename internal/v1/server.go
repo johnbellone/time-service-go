@@ -15,14 +15,14 @@ import (
 )
 
 type Server struct {
-	*pb.UnimplementedTimeServer
+	*pb.UnimplementedTimeServiceServer
 }
 
 func NewServer() *Server {
 	return &Server{}
 }
 
-func (s *Server) GetCurrentTime(ctx context.Context, req *pb.GetTimeRequest) (*pb.GetTimeResponse, error) {
+func (s *Server) GetCurrentTime(ctx context.Context, req *pb.GetCurrentTimeRequest) (*pb.GetCurrentTimeResponse, error) {
 	span, ctx := opentracing.StartSpanFromContext(ctx, "TimeServer/GetCurrentTime")
 	defer span.Finish()
 
@@ -32,7 +32,7 @@ func (s *Server) GetCurrentTime(ctx context.Context, req *pb.GetTimeRequest) (*p
 	}
 
 	now := time.Now().UTC()
-	rsp := pb.GetTimeResponse{
+	rsp := pb.GetCurrentTimeResponse{
 		Timestamp: timestamppb.New(now),
 	}
 	return &rsp, nil

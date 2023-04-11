@@ -13,7 +13,7 @@ import (
 	"go.uber.org/zap"
 
 	time_api_v1 "github.com/johnbellone/time-service-go/gen/time/v1"
-	time_api_v2 "github.com/johnbellone/time-service-go/gen/time/v2beta1"
+	time_api_v2 "github.com/johnbellone/time-service-go/gen/time/v2"
 	time_server_v1 "github.com/johnbellone/time-service-go/internal/v1"
 	time_server_v2 "github.com/johnbellone/time-service-go/internal/v2"
 
@@ -86,8 +86,8 @@ func main() {
 	// Adds all of the handlers for RPC requests to the GRPC server instance. This code is
 	// generated when the `protoc` command is run with the `plugins:grpc` switch enabled.
 	grpc_health_v1.RegisterHealthServer(s, health.NewServer())
-	time_api_v1.RegisterTimeServer(s, time_server_v1.NewServer())
-	time_api_v2.RegisterTimeServer(s, time_server_v2.NewServer())
+	time_api_v1.RegisterTimeServiceServer(s, time_server_v1.NewServer())
+	time_api_v2.RegisterTimeServiceServer(s, time_server_v2.NewServer())
 	reflection.Register(s)
 
 	ln, err := net.Listen("tcp", fmt.Sprintf(":%d", GrpcPort))
