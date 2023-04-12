@@ -25,7 +25,7 @@ proto: check
 
 build:
 	@mkdir -p bin/
-	@go build -ldflags "$(LDFLAGS)" -o bin/time-service
+	@go build -ldflags "-s -w $(LDFLAGS)" -o bin/time-service
 
 release: all
 	@zip --junk-paths bin/* README.md LICENSE
