@@ -12,7 +12,7 @@ jobs:
       - uses: actions/setup-go@v4
         with:
           go-version: ${{ matrix.go }}
-      - uses: bufbuild/buf-setup-action@v0.6.0
+      - uses: bufbuild/buf-setup-action@v1
       - uses: bufbuild/buf-lint-action@v1
       - run: make all
   release:
